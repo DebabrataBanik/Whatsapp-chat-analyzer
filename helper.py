@@ -3,6 +3,7 @@ from wordcloud import WordCloud
 import pandas as pd
 from collections import Counter
 import emoji
+import numpy as np
 extract = URLExtract()
 
 
@@ -107,7 +108,6 @@ def monthly_timeline(selected_user, df):
     if selected_user != 'Overall':
         df = df[df['users'] == selected_user]
 
-    df['month_no'] = df['dates'].dt.month
     timeline = df.groupby(['year', 'month_no', 'month'])[
         'message'].count().reset_index()
     time = []
@@ -123,7 +123,23 @@ def daily_timeline(selected_user, df):
     if selected_user != 'Overall':
         df = df[df['users'] == selected_user]
 
-    df['date'] = df['dates'].dt.date
+    
     daily_timeline_df = df.groupby('date')['message'].count().reset_index()
 
     return daily_timeline_df
+
+def activity_map(selected_user,df):
+
+    if selected_user != 'Overall':
+        df = df[df['users'] == selected_user]
+
+    return df['day_name'].value_counts(),df['month'].value_counts()
+
+def heatmap(selected_user,df):
+
+    if selected_user != 'Overall':
+        df = df[df['users'] == selected_user]
+
+    user_heatmap = df.pivot_table(index='day_name',columns='period',values='message',aggfunc='count').fillna(0)
+    
+    return user_heatmap
