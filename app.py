@@ -151,5 +151,5 @@ if uploaded_file is not None:
         st.title("Activity Heatmap")
         user_heatmap=helper.heatmap(selected_user,df)
         fig,ax=plt.subplots()
-        sns.heatmap(user_heatmap)
+        sns.heatmap(user_heatmap, cmap ="YlGn")
         st.pyplot(fig)
