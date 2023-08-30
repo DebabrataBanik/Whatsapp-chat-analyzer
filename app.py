@@ -2,6 +2,8 @@ import streamlit as st
 import preprocessor
 import helper
 import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 st.sidebar.title('Whatsapp Chat Analyzer')
 
@@ -123,3 +125,31 @@ if uploaded_file is not None:
             ax.pie(emoji_df[1].head(),
                    labels=emoji_df[0].head(), autopct='%0.2f')
             st.pyplot(fig)
+
+        #activity timeline
+
+        week_activity,month_activity = helper.activity_map(selected_user,df)
+
+        st.title('Activity timeline')
+        col1,col2=st.columns(2)
+
+        with col1:
+            st.header('Weekdays Activity')
+            fig,ax=plt.subplots()
+            ax.bar(week_activity.index,week_activity.values)
+            plt.xticks(rotation='vertical')
+            st.pyplot(fig)
+
+        with col2:
+            st.header('Months Activity')
+            fig,ax=plt.subplots()
+            ax.bar(month_activity.index,month_activity.values,color='green')
+            plt.xticks(rotation='vertical')
+            st.pyplot(fig)
+
+        #Heatmap
+        st.title("Activity Heatmap")
+        user_heatmap=helper.heatmap(selected_user,df)
+        fig,ax=plt.subplots()
+        sns.heatmap(user_heatmap)
+        st.pyplot(fig)
