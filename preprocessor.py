@@ -35,5 +35,19 @@ def preprocess(data):
     df['day'] = df['dates'].dt.day
     df['hour'] = df['dates'].dt.hour
     df['minute'] = df['dates'].dt.minute
+    df['day_name']=df['dates'].dt.day_name()
+    df['date']=df['dates'].dt.date
+    df['month_no']=df['dates'].dt.month
+
+    period = []
+    for hour in df['hour']:
+        if hour == 23:
+            period.append(str(hour) + "-" + str('00'))
+        elif hour == 0:
+            period.append(str('00') + "-" + str(hour + 1))
+        else:
+            period.append(str(hour) + "-" + str(hour + 1))
+
+    df['period'] = period
 
     return df
